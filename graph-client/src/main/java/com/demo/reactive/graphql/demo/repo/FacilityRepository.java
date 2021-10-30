@@ -2,9 +2,16 @@ package com.demo.reactive.graphql.demo.repo;
 
 import com.demo.reactive.graphql.demo.model.Facility;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
- * 9fbef606107a605d69c0edbcd8029e5d
+ *
  */
 public interface FacilityRepository extends ReactiveCrudRepository<Facility, Long> {
+
+    Mono<Facility> findByAddressId(long addressId);
+
+    Flux<Facility> findByName(String name);
+
 }

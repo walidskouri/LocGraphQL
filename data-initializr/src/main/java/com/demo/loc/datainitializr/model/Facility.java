@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 
 
 /**
- * 9fbef606107a605d69c0edbcd8029e5d
+ *
  */
 @Data
 @Entity(name = "facility")

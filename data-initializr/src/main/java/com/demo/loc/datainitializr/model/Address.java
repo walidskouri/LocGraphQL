@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * 9fbef606107a605d69c0edbcd8029e5d
+ *
  */
 @Data
 @AllArgsConstructor

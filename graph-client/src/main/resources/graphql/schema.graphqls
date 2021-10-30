@@ -1,5 +1,20 @@
 type Query {
     facilities: [Facility]
+    addresses: [Address]
+    findFacilityByName(name : String): [Facility]
+}
+
+type Facility {
+    id: ID
+    anabel: String
+    name: String
+    address: Address
+    contact: Contact
+}
+
+type Contact {
+    id: ID
+    name: String
 }
 
 type Address {
@@ -9,12 +24,9 @@ type Address {
     streetAddressThree: String
     city: String
     country: String
+    facility : Facility
 }
 
-type Facility {
-    id: ID
-    anabel: String
-    name: String
-    address: Address
-    addresses: [Address]
+type Mutation {
+    addAddress(streetAddressOne: String, city: String, country: String) : Address
 }

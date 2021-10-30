@@ -1,14 +1,16 @@
 package com.demo.reactive.graphql.demo.model;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
 
 /**
- * 9fbef606107a605d69c0edbcd8029e5d
+ *
  */
 @Data
+@Builder
 public class Address {
 
     @Id
