@@ -1,0 +1,70 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_facility
+      author: demo_user
+      changes:
+        - createTable:
+            tableName: facility
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    - primaryKey: true
+                    - nullable: false
+              - column:
+                  name: anabel
+                  type: varchar(50)
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: address_fk
+                  type: int
+  - changeSet:
+      id: create_address
+      author: demo_user
+      changes:
+        - createTable:
+            tableName: address
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    - primaryKey: true
+                    - nullable: false
+              - column:
+                  name: street_address_one
+                  type: varchar(255)
+              - column:
+                  name: street_address_two
+                  type: varchar(255)
+              - column:
+                  name: street_address_three
+                  type: varchar(255)
+              - column:
+                  name: city
+                  type: varchar(255)
+              - column:
+                  name: country
+                  type: varchar(255)
+  - changeSet:
+      id: addForeignKeyConstraint-facility-address
+      author: demo_user
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: address_fk
+            baseTableName: facility
+            constraintName: fk_facility_address
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: address
+            validate: true
