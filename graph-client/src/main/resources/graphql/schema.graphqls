@@ -1,0 +1,20 @@
+type Query {
+    facilities: [Facility]
+}
+
+type Address {
+    id: ID
+    streetAddressOne: String
+    streetAddressTwo: String
+    streetAddressThree: String
+    city: String
+    country: String
+}
+
+type Facility {
+    id: ID
+    anabel: String
+    name: String
+    address: Address
+    addresses: [Address]
+}

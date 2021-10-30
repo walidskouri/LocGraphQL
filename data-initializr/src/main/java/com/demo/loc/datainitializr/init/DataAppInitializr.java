@@ -47,6 +47,10 @@ public class DataAppInitializr {
                         .anabel(UUID.randomUUID().toString())
                         .address(Address
                                 .builder()
+                                .country("France")
+                                .streetAddressOne(i + " - Address 1")
+                                .streetAddressTwo(i + " - Address 2")
+                                .streetAddressThree(i + " - Address 3")
                                 .city(cities.get((new Random().nextInt(cities.size()))))
                                 .build())
                         .build()
