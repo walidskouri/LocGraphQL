@@ -29,4 +29,20 @@ type Address {
 
 type Mutation {
     addAddress(streetAddressOne: String, city: String, country: String) : Address
+    addFacility(name: String): Facility
+}
+
+type Subscription{
+    facilityEvents(facilityId: ID) : FacilityEvent
+}
+
+type FacilityEvent {
+    facility: Facility
+    event: FacilityEventType
+}
+
+enum FacilityEventType {
+    CREATED
+    UPDATED
+    DELETED
 }

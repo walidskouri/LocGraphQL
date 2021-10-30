@@ -1,5 +1,6 @@
 package com.demo.reactive.graphql.demo.model;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
@@ -8,6 +9,7 @@ import org.springframework.data.relational.core.mapping.Column;
  *
  */
 @Data
+@Builder
 public class Facility {
 
     @Id

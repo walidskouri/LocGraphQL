@@ -3,6 +3,8 @@ package com.demo.reactive.graphql.demo.controller;
 import com.demo.reactive.graphql.demo.model.Address;
 import com.demo.reactive.graphql.demo.model.Contact;
 import com.demo.reactive.graphql.demo.model.Facility;
+import com.demo.reactive.graphql.demo.model.FacilityEvent;
+import com.demo.reactive.graphql.demo.model.FacilityEventType;
 import com.demo.reactive.graphql.demo.repo.AddressRepository;
 import com.demo.reactive.graphql.demo.repo.FacilityRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +13,16 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Controller
 @RequiredArgsConstructor
@@ -80,6 +86,32 @@ public class FacilityGraphqlController {
                 .country(country)
                 .build();
         return addressRepository.save(newAddress);
+    }
+
+    @MutationMapping
+    Mono<Facility> addFacility(@Argument String name) {
+        Facility newAddress = Facility.builder()
+                .name(name)
+                .anabel(UUID.randomUUID().toString())
+                .addressId(new Random().nextInt(50))
+                .build();
+        return facilityRepository.save(newAddress);
+    }
+
+    @SubscriptionMapping
+    Flux<FacilityEvent> facilityEvents(@Argument long facilityId) {
+        return this.facilityRepository.findById(facilityId)
+                .flatMapMany(facility -> {
+                    Stream<FacilityEvent> stream = Stream.generate(
+                            () -> FacilityEvent.builder()
+                                    .facility(facility)
+                                    .event(FacilityEventType.values()[new Random().nextInt(FacilityEventType.values().length)])
+                                    .build()
+                    );
+                    return Flux.fromStream(stream);
+                })
+                .delayElements(Duration.ofSeconds(1))
+                .take(100);
     }
 
 

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GraphQL over WebSocket</title>
+    <script type="text/javascript" src="https://unpkg.com/graphql-ws/umd/graphql-ws.js"></script>
+
+    <script>
+
+        class Graphql {
+
+            constructor(url) {
+                this.client = graphqlWs.createClient({url: url})
+            }
+
+            subscribe(q, callback) {
+                this.client.subscribe(
+                    {query: q},
+                    {
+                        next: callback,
+                        error: (err) => console.error('there is an error', err),
+                        complete: () => console.log('subscription is complete.'),
+                    },
+                );
+            }
+
+            async query(queryString) {
+                return await new Promise((resolve, reject) => {
+                    let result;
+                    this.client.subscribe(
+                        {
+                            query: queryString,
+                        },
+                        {
+                            next: (data) => (result = data),
+                            error: reject,
+                            complete: () => resolve(result),
+                        },
+                    );
+                })
+            }
+        }
+
+        class Crm {
+
+            constructor() {
+                this.client = new Graphql('ws://localhost:8080/graphql')
+
+            }
+
+            async readFacilities() {
+                const q = `
+                { facilities {id, name, anabel} }
+                `
+                return (await this.client.query(q)) ['data']['facilities']
+            }
+
+            async addFacility(name) {
+                const q = `
+                    mutation {
+                        addFacility(name : "${name}") {id, name, anabel}
+                    }
+                `
+                return (await this.client.query(q)) ['data']['addFacility']
+            }
+
+            subscribeToFacilityUpdates(facilityId, callback) {
+                const q = `
+                    subscription {
+                        facilityEvents( facilityId : ${facilityId}) {
+                            facility { id, name, anabel }
+                            event
+                        }
+                    }
+                `
+                this.client.subscribe(q, (next) => {
+                    const result = next ['data']['facilityEvents']
+                    callback(result)
+                });
+            }
+        }
+
+        window.addEventListener('load', async () => {
+            const crm = new Crm()
+            await crm.subscribeToFacilityUpdates(2, (event) => {
+                console.log(event.facility.id + ' = ' + event.facility.name + ' ' + event.event + ' @ ' + new Date())
+            })
+            await crm.addFacility('OK OK !!')
+            const facilities = await crm.readFacilities()
+            console.log('facility: ', facilities)
+        })
+
+    </script>
+</head>
+<body>
+</body>
+</html>
