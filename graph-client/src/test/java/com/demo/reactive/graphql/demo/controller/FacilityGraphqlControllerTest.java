@@ -6,7 +6,6 @@ import com.demo.reactive.graphql.demo.infrastructure.repo.FacilityRepository;
 import com.demo.reactive.graphql.demo.infrastructure.spi.random.RandomApiClient;
 import com.demo.reactive.graphql.demo.model.Address;
 import com.demo.reactive.graphql.demo.model.Facility;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,7 +25,6 @@ import static org.mockito.Mockito.when;
  *
  */
 @GraphQlTest(controllers = {FacilityGraphqlController.class})
-@Slf4j
 class FacilityGraphqlControllerTest {
 
     @Autowired
