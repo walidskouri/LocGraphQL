@@ -155,7 +155,7 @@ public class FacilityGraphqlController {
                     );
                     return Flux.fromStream(stream);
                 })
-                .delayElements(Duration.ofSeconds(1))
+//                .delayElements(Duration.ofSeconds(1))
                 .take(100);
     }
 

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
  *
  */
 @GraphQlTest(controllers = {FacilityGraphqlController.class})
-class FacilityGraphqlControllerTest {
+class GraphqlQueryTest {
 
     @Autowired
     GraphQlTester graphQlTester;
