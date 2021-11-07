@@ -1,4 +1,4 @@
-package com.demo.reactive.graphql.demo.repo;
+package com.demo.reactive.graphql.demo.infrastructure.repo;
 
 import com.demo.reactive.graphql.demo.model.Address;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;

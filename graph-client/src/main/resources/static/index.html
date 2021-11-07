@@ -42,7 +42,6 @@
         }
 
         class Crm {
-
             constructor() {
                 this.client = new Graphql('ws://localhost:8080/graphql')
 
@@ -82,7 +81,7 @@
 
         window.addEventListener('load', async () => {
             const crm = new Crm()
-            await crm.subscribeToFacilityUpdates(2, (event) => {
+            await crm.subscribeToFacilityUpdates(5, (event) => {
                 console.log(event.facility.id + ' = ' + event.facility.name + ' ' + event.event + ' @ ' + new Date())
             })
             await crm.addFacility('OK OK !!')

@@ -1,0 +1,19 @@
+### PostgreSQL
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/loc?schema=public
+    username: postgres
+    password: changeme
+  graphql:
+    websocket:
+      connection-init-timeout: 60s
+      path: /graphql
+### Logging
+logging:
+  level:
+    io.r2dbc.postgresql.QUERY: DEBUG
+    io.r2dbc.postgresql.PARAM: DEBUG
+    com.demo.reactive.graphql: INFO
+
+random-api:
+  base-uri: https://dog.ceo/api/breeds/image/random

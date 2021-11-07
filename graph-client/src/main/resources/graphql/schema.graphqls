@@ -1,7 +1,10 @@
 type Query {
     facilities: [Facility]
+    pagedFacilities(page : Int, size : Int): FacilityPage
     addresses: [Address]
     findFacilityByName(name : String): [Facility]
+    randomImages: [Image]
+    randomImage: Image
 }
 
 type Facility {
@@ -10,7 +13,15 @@ type Facility {
     name: String
     address: Address
     contact: Contact
+    image: Image
 }
+
+type FacilityPage {
+    content : [Facility]
+    totalPages : Int
+    totalElements : Int
+}
+
 
 type Contact {
     id: ID
@@ -24,8 +35,14 @@ type Address {
     streetAddressThree: String
     city: String
     country: String
-    facility : Facility
+    facilities : [Facility]
 }
+
+type Image {
+    message : String
+    status : String
+}
+
 
 type Mutation {
     addAddress(streetAddressOne: String, city: String, country: String) : Address
