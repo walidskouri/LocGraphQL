@@ -1,7 +1,7 @@
 package com.demo.reactive.graphql.demo.controller;
 
 
-import com.demo.reactive.graphql.demo.infrastructure.repo.AddressRepository;
+import com.demo.reactive.graphql.demo.domain.AddressService;
 import com.demo.reactive.graphql.demo.infrastructure.repo.FacilityRepository;
 import com.demo.reactive.graphql.demo.infrastructure.spi.random.RandomApiClient;
 import com.demo.reactive.graphql.demo.model.Address;
@@ -32,8 +32,10 @@ class GraphqlQueryTest {
 
     @MockBean
     FacilityRepository facilityRepository;
+
     @MockBean
-    AddressRepository addressRepository;
+    AddressService addressService;
+
     @MockBean
     RandomApiClient randomApiClient;
 
@@ -76,12 +78,12 @@ class GraphqlQueryTest {
                         Facility.builder().id(2).anabel("Anabel Mock 2").name("Facility 2").addressId(2).build()
                 )
         );
-        when(addressRepository.findById(eq(1L))).thenReturn(
+        when(addressService.findById(eq(1L))).thenReturn(
                 Mono.just(
                         Address.builder().id(1).streetAddressOne("Add1").country("FRANCE").city("PARIS").build()
                 )
         );
-        when(addressRepository.findById(eq(2L))).thenReturn(
+        when(addressService.findById(eq(2L))).thenReturn(
                 Mono.just(
                         Address.builder().id(2).streetAddressOne("Add2").country("FRANCE").city("PARIS").build()
                 )
@@ -107,8 +109,8 @@ class GraphqlQueryTest {
         ;
 
         verify(facilityRepository, times(1)).findAll();
-        verify(addressRepository, times(1)).findById(eq(1L));
-        verify(addressRepository, times(1)).findById(eq(2L));
+        verify(addressService, times(1)).findById(eq(1L));
+        verify(addressService, times(1)).findById(eq(2L));
 
         verifyNoMoreInteractions(facilityRepository);
 

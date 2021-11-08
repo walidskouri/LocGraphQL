@@ -1,6 +1,6 @@
 package com.demo.reactive.graphql.demo.controller;
 
-import com.demo.reactive.graphql.demo.infrastructure.repo.AddressRepository;
+import com.demo.reactive.graphql.demo.domain.AddressService;
 import com.demo.reactive.graphql.demo.infrastructure.repo.FacilityRepository;
 import com.demo.reactive.graphql.demo.infrastructure.spi.random.RandomApiClient;
 import com.demo.reactive.graphql.demo.infrastructure.spi.random.model.RandomDogImageResult;
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 public class FacilityGraphqlController {
 
     private final FacilityRepository facilityRepository;
-    private final AddressRepository addressRepository;
+    private final AddressService addressService;
     private final RandomApiClient randomApiClient;
 
     // @SchemaMapping(typeName = "Query", field = "facilities")
@@ -73,7 +73,7 @@ public class FacilityGraphqlController {
 
     @QueryMapping
     Flux<Address> addresses() {
-        return this.addressRepository.findAll();
+        return this.addressService.findAll();
     }
 
     @QueryMapping
@@ -83,12 +83,12 @@ public class FacilityGraphqlController {
 
     @SchemaMapping(typeName = "Facility")
     Flux<Address> addresses(Facility facility) {
-        return this.addressRepository.findAllById(List.of(facility.getAddressId()));
+        return this.addressService.findAllById(List.of(facility.getAddressId()));
     }
 
     @SchemaMapping(typeName = "Facility")
     Mono<Address> address(Facility facility) {
-        return this.addressRepository.findById(facility.getAddressId());
+        return this.addressService.findById(facility.getAddressId());
     }
 
 
@@ -124,12 +124,7 @@ public class FacilityGraphqlController {
     //@SchemaMapping(typeName = "Mutation", field = "addAddress")
     @MutationMapping
     Mono<Address> addAddress(@Argument String streetAddressOne, @Argument String city, @Argument String country) {
-        Address newAddress = Address.builder()
-                .streetAddressOne(streetAddressOne)
-                .city(city)
-                .country(country)
-                .build();
-        return addressRepository.save(newAddress);
+        return addressService.addAddress(streetAddressOne, null, null, city, country);
     }
 
     @MutationMapping
@@ -158,5 +153,13 @@ public class FacilityGraphqlController {
 //                .delayElements(Duration.ofSeconds(1))
                 .take(100);
     }
+
+
+    @SubscriptionMapping
+    Flux<Address> addressAdded() {
+        return addressService.addressAdded()
+                .delayElements(Duration.ofMillis(500));
+    }
+
 
 }

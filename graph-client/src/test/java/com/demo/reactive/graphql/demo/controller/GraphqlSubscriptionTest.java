@@ -1,6 +1,6 @@
 package com.demo.reactive.graphql.demo.controller;
 
-import com.demo.reactive.graphql.demo.infrastructure.repo.AddressRepository;
+import com.demo.reactive.graphql.demo.domain.AddressService;
 import com.demo.reactive.graphql.demo.infrastructure.repo.FacilityRepository;
 import com.demo.reactive.graphql.demo.infrastructure.spi.random.RandomApiClient;
 import com.demo.reactive.graphql.demo.model.Facility;
@@ -35,9 +35,11 @@ public class GraphqlSubscriptionTest {
     GraphQlTester graphQlTester;
 
     @MockBean
-    FacilityRepository facilityRepository;
+    AddressService addressService;
+
     @MockBean
-    AddressRepository addressRepository;
+    FacilityRepository facilityRepository;
+
     @MockBean
     RandomApiClient randomApiClient;
 
@@ -122,4 +124,52 @@ public class GraphqlSubscriptionTest {
         verifyNoMoreInteractions(facilityRepository);
 
     }
+
+//    @Test
+//    void addressAddedSubscriptionTest() {
+//
+//        when(addressRepository.save(any()))
+//                .thenReturn(Mono.just(Address.builder()
+//                        .id(1L)
+//                        .city("PARIS")
+//                        .country("FRANCE")
+//                        .streetAddressThree("add 1")
+//                        .build()));
+//
+//        Flux<Address> result = this.graphQlTester.query("subscription { addressAdded { id city country } }")
+//                .executeSubscription()
+//                .toFlux("addressAdded", Address.class);
+//
+//        var verify = StepVerifier.create(result)
+//                .consumeNextWith(c -> assertThat(c.getStreetAddressOne()).startsWith("comment of my post at "))
+//                .consumeNextWith(c -> assertThat(c.getStreetAddressOne()).startsWith("comment of my post at "))
+//                .consumeNextWith(c -> assertThat(c.getStreetAddressOne()).startsWith("comment of my post at "))
+//                .thenCancel().verifyLater();
+//
+//        addAddressToPost("Address One " + UUID.randomUUID().toString(), "PARIS", "FRANCE");
+//        addAddressToPost("Address One " + UUID.randomUUID().toString(), "PARIS", "FRANCE");
+//        addAddressToPost("Address One " + UUID.randomUUID().toString(), "PARIS", "FRANCE");
+//
+//        verify.verify();
+//        verify(addressRepository, times(3)).save(any());
+//    }
+//
+//    private void addAddressToPost(String addressStreetOne, String city, String country) {
+//
+//        var addComment = "mutation addAddress($streetAddressOne: String, $city: String, $country: String) " +
+//                "{ addAddress(streetAddressOne:$streetAddressOne, city:$city, country:$country) " +
+//                "{ id }}";
+//
+//        Integer addressId = graphQlTester.query(addComment)
+//                .variable("streetAddressOne", addressStreetOne)
+//                .variable("city", city)
+//                .variable("country", country)
+//                .execute()
+//                .path("addAddress.id")
+//                .entity(Integer.class).get();
+//
+//        log.info("added comment of post: {}", addressId);
+//        assertThat(addressId).isNotNull();
+//
+//    }
 }

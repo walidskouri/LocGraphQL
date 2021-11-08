@@ -77,6 +77,18 @@
                     callback(result)
                 });
             }
+
+            subscribeToAddressAdded(callback) {
+                const q = `
+                    subscription {
+                        addressAdded { id streetAddressOne city country }
+                    }
+                `
+                this.client.subscribe(q, (next) => {
+                    const result = next ['data']['addressAdded']
+                    callback(result)
+                });
+            }
         }
 
         window.addEventListener('load', async () => {
@@ -84,7 +96,10 @@
             await crm.subscribeToFacilityUpdates(5, (event) => {
                 console.log(event.facility.id + ' = ' + event.facility.name + ' ' + event.event + ' @ ' + new Date())
             })
-            await crm.addFacility('OK OK !!')
+            await crm.subscribeToAddressAdded((address) => {
+                console.log('Address added : ' + address.id + ' = ' + address.streetAddressOne + ' ' + address.city + ' ' + address.country +  ' @ ' + new Date())
+            })
+            await crm.addFacility('Another facility')
             const facilities = await crm.readFacilities()
             console.log('facility: ', facilities)
         })

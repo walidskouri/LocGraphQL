@@ -11,8 +11,8 @@ spring:
 ### Logging
 logging:
   level:
-    io.r2dbc.postgresql.QUERY: DEBUG
-    io.r2dbc.postgresql.PARAM: DEBUG
+    io.r2dbc.postgresql.QUERY: INFO
+    io.r2dbc.postgresql.PARAM: INFO
     com.demo.reactive.graphql: INFO
 
 random-api:
