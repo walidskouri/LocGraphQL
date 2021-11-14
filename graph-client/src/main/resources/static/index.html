@@ -66,7 +66,7 @@
             subscribeToFacilityUpdates(facilityId, callback) {
                 const q = `
                     subscription {
-                        facilityEvents( facilityId : ${facilityId}) {
+                        facilityEvents( facilityId : ${facilityId}, delay : 1) {
                             facility { id, name, anabel }
                             event
                         }

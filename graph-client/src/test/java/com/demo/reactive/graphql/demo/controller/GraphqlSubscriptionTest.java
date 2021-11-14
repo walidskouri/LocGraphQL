@@ -43,7 +43,6 @@ public class GraphqlSubscriptionTest {
     @MockBean
     RandomApiClient randomApiClient;
 
-
     @Test
     void facilityEventsTest() {
         // Given
@@ -54,7 +53,7 @@ public class GraphqlSubscriptionTest {
         );
 
         String query = "subscription {\n" +
-                "            facilityEvents( facilityId : 1) {\n" +
+                "            facilityEvents( facilityId : 1, delay : 0) {\n" +
                 "                facility { id, name, anabel }\n" +
                 "                event\n" +
                 "            }\n" +
@@ -97,7 +96,7 @@ public class GraphqlSubscriptionTest {
         );
 
         String query = "subscription {\n" +
-                "            facilityEvents( facilityId : 1) {\n" +
+                "            facilityEvents( facilityId : 1, delay : 0) {\n" +
                 "                facility { id, name, anabel }\n" +
                 "                event\n" +
                 "            }\n" +

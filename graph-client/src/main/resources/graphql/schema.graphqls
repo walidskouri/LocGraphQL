@@ -7,6 +7,7 @@ type Query {
     randomImage: Image
 }
 
+
 type Facility {
     id: ID
     anabel: String
@@ -43,14 +44,13 @@ type Image {
     status : String
 }
 
-
 type Mutation {
     addAddress(streetAddressOne: String, city: String, country: String) : Address
     addFacility(name: String): Facility
 }
 
 type Subscription{
-    facilityEvents(facilityId: ID) : FacilityEvent
+    facilityEvents(facilityId: ID, delay: Int) : FacilityEvent
     addressAdded : Address
 }
 

@@ -48,6 +48,24 @@ public class FacilityGraphqlController {
         return this.facilityRepository.findAll();
     }
 
+    @SchemaMapping(typeName = "Facility")
+    Flux<Address> addresses(Facility facility) {
+        return this.addressService.findAllById(List.of(facility.getAddressId()));
+    }
+
+    @SchemaMapping(typeName = "Facility")
+    Mono<RandomDogImageResult> image(Facility facility) {
+        log.info("Looking for image of Facility {}", facility.getAnabel());
+        return randomApiClient.getRandomImage((int) facility.getId());
+    }
+
+    @SchemaMapping(typeName = "Facility")
+    Mono<Address> address(Facility facility) {
+
+        return this.addressService.findById(facility.getAddressId());
+    }
+
+
     @QueryMapping
     Mono<Page<Facility>> pagedFacilities(@Argument int page, @Argument int size) {
         PageRequest pageable = PageRequest.ofSize(size).withPage(page).withSort(Sort.Direction.ASC, "id");
@@ -79,23 +97,6 @@ public class FacilityGraphqlController {
     @QueryMapping
     Flux<Facility> findFacilityByName(@Argument String name) {
         return facilityRepository.findByName(name);
-    }
-
-    @SchemaMapping(typeName = "Facility")
-    Flux<Address> addresses(Facility facility) {
-        return this.addressService.findAllById(List.of(facility.getAddressId()));
-    }
-
-    @SchemaMapping(typeName = "Facility")
-    Mono<Address> address(Facility facility) {
-        return this.addressService.findById(facility.getAddressId());
-    }
-
-
-    @SchemaMapping(typeName = "Facility")
-    Mono<RandomDogImageResult> image(Facility facility) {
-        log.info("Looking for image of Facility {}", facility.getAnabel());
-        return randomApiClient.getRandomImage((int) facility.getId());
     }
 
     @SchemaMapping(typeName = "Address")
@@ -137,9 +138,8 @@ public class FacilityGraphqlController {
         return facilityRepository.save(newAddress);
     }
 
-
     @SubscriptionMapping
-    Flux<FacilityEvent> facilityEvents(@Argument long facilityId) {
+    Flux<FacilityEvent> facilityEvents(@Argument long facilityId, @Argument int delay) {
         return this.facilityRepository.findById(facilityId)
                 .flatMapMany(facility -> {
                     Stream<FacilityEvent> stream = Stream.generate(
@@ -150,15 +150,14 @@ public class FacilityGraphqlController {
                     );
                     return Flux.fromStream(stream);
                 })
-//                .delayElements(Duration.ofSeconds(1))
+                .delayElements(Duration.ofSeconds(delay))
                 .take(100);
     }
 
 
     @SubscriptionMapping
     Flux<Address> addressAdded() {
-        return addressService.addressAdded()
-                .delayElements(Duration.ofMillis(500));
+        return addressService.addressAdded();
     }
 
 
