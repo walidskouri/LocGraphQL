@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 /**
- * 9fbef606107a605d69c0edbcd8029e5d
+ *
  */
 @GraphQlTest(controllers = {FacilityGraphqlController.class})
 @Slf4j
